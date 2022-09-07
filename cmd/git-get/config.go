@@ -8,8 +8,8 @@ import (
 )
 
 type Specification struct {
-	Debug          bool
-	GitProjectsDir string `default:"/tmp"`
+	Debug       bool
+	ProjectsDir string `default:"/tmp" split_words:"true"`
 }
 
 var appConfig Specification

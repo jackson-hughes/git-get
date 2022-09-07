@@ -49,7 +49,7 @@ func main() {
 		gitURL = *URL
 	}
 
-	projectFilepath := internal.GetFilepathFromURL(gitURL, appConfig.GitProjectsDir)
+	projectFilepath := internal.GetFilepathFromURL(gitURL, appConfig.ProjectsDir)
 	log.Debug().Msgf("input url: %v", gitURL.String())
 	log.Debug().Msgf("path to write repo to: %v", projectFilepath)
 
