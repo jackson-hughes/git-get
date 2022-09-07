@@ -11,6 +11,11 @@ build:
 	-X main.vcsCommit=${GIT_COMMIT} \
 	-X main.vcsURL=${GIT_URL}" ./...
 
+install:
+	GOARCH=$(GOARCH) GOOS=$(GOOS) go install -ldflags " \
+	-X main.vcsCommit=${GIT_COMMIT} \
+	-X main.vcsURL=${GIT_URL}" ./...
+
 clean:
 	go clean -r
 	rm -f ./git-get

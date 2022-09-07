@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"git-get/internal"
+	"git-get/internal/urls"
 	"github.com/rs/zerolog/log"
 	"net/url"
 	"os"
@@ -17,13 +17,14 @@ git-get accepts one argument, the git project url to clone, for example:
 	fmt.Println(helpMessage)
 }
 
-func clone(gitProjectURL url.URL, gitProjectsDir string) {
+func clone(gitProjectURL url.URL, gitProjectsDir string) error {
 	cmd := exec.Command("git", "clone", gitProjectURL.String(), gitProjectsDir)
-	stdoutStderr, err := cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println(err)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return err
 	}
-	log.Info().Msg(string(stdoutStderr))
+	return nil
 }
 
 func main() {
@@ -35,8 +36,8 @@ func main() {
 
 	var gitURL url.URL
 
-	if ok := internal.IsScpSyntax(gitProjectURL); ok {
-		URL, err := internal.ConvertScpURL(gitProjectURL)
+	if ok := urls.IsScpSyntax(gitProjectURL); ok {
+		URL, err := urls.ConvertScpURL(gitProjectURL)
 		if err != nil {
 			log.Fatal().Err(err)
 		}
@@ -49,10 +50,11 @@ func main() {
 		gitURL = *URL
 	}
 
-	projectFilepath := internal.GetFilepathFromURL(gitURL, appConfig.ProjectsDir)
+	projectFilepath := urls.GetFilepathFromURL(gitURL, appConfig.Dir)
 	log.Debug().Msgf("input url: %v", gitURL.String())
 	log.Debug().Msgf("path to write repo to: %v", projectFilepath)
 
-	clone(gitURL, projectFilepath)
-
+	if err := clone(gitURL, projectFilepath); err != nil {
+		log.Err(err)
+	}
 }
