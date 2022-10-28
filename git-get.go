@@ -13,7 +13,7 @@ func displayHelp() {
 	helpMessage := `git-get is a simple utility that clones git repositories into a go get style directory structure.
 
 git-get accepts one argument, the git project url to clone, for example:
-	git-get https://github.com/jhughes01/git-get.git`
+	git-get https://github.com/jackson-hughes/git-get.git`
 	fmt.Println(helpMessage)
 }
 

@@ -20,7 +20,7 @@ func IsScpSyntax(url string) bool {
 }
 
 // ConvertScpURL converts scp syntax urls into ssh transport urls
-// git@github.com:jhughes01/git-get.git -> ssh://git@github.com/jhughes01/git-get
+// git@github.com:jackson-hughes/git-get.git -> ssh://git@github.com/jackson-hughes/git-get
 func ConvertScpURL(scpSyntaxUrl string) (*url.URL, error) {
 	log.Debug().Msgf("ConvertScpURL: received input %v: ", scpSyntaxUrl)
 	convertedUrl, err := url.Parse(fmt.Sprintf("ssh://%v", strings.Replace(
@@ -36,6 +36,11 @@ func ConvertScpURL(scpSyntaxUrl string) (*url.URL, error) {
 // GetFilepathFromURL determines the go get style filepath based on the git url
 func GetFilepathFromURL(url url.URL, gitProjectRoot string) string {
 	gitHost := url.Host
+	// trim port from filepath
+	if strings.Contains(gitHost, ":") {
+		gitHost = strings.Split(url.Host, ":")[0]
+		log.Debug().Msgf("port found in hostname, %v has been replaced with %v", url.Host, gitHost)
+	}
 	gitProject := strings.Replace(url.Path, ".git", "", 1)
 	path := fmt.Sprint(gitProjectRoot, "/", gitHost, gitProject)
 	return path

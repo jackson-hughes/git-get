@@ -6,7 +6,7 @@ import (
 
 func TestIsScpSyntax(t *testing.T) {
 	t.Run("scpUrlTrue", func(t *testing.T) {
-		url := "git@github.com:jhughes01/git-get.git"
+		url := "git@github.com:jackson-hughes/git-get.git"
 		match := IsScpSyntax(url)
 
 		if match != true {
@@ -15,7 +15,7 @@ func TestIsScpSyntax(t *testing.T) {
 	})
 
 	t.Run("notScpUrlTrue", func(t *testing.T) {
-		url := "ssh://git@github.com/jhughes01/git-get"
+		url := "ssh://git@github.com/jackson-hughes/git-get"
 		match := IsScpSyntax(url)
 
 		if match == true {
@@ -25,8 +25,8 @@ func TestIsScpSyntax(t *testing.T) {
 }
 
 func TestConvertScpUrl(t *testing.T) {
-	url := "git@github.com:jhughes01/git-get.git"
-	want := "ssh://git@github.com/jhughes01/git-get"
+	url := "git@github.com:jackson-hughes/git-get.git"
+	want := "ssh://git@github.com/jackson-hughes/git-get"
 
 	got, err := ConvertScpURL(url)
 	if got.String() != want && err == nil {
