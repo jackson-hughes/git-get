@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"git-get/internal/urls"
-	"github.com/rs/zerolog/log"
 	"net/url"
 	"os"
 	"os/exec"
+
+	"github.com/rs/zerolog/log"
 )
 
 func displayHelp() {
@@ -56,5 +57,6 @@ func main() {
 
 	if err := clone(gitURL, projectFilepath); err != nil {
 		log.Err(err)
+		os.Exit(1)
 	}
 }

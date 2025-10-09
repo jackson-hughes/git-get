@@ -1,6 +1,8 @@
 package urls
 
 import (
+	"net/url"
+	"path/filepath"
 	"testing"
 )
 
@@ -29,7 +31,25 @@ func TestConvertScpUrl(t *testing.T) {
 	want := "ssh://git@github.com/jackson-hughes/git-get"
 
 	got, err := ConvertScpURL(url)
-	if got.String() != want && err == nil {
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if got.String() != want {
 		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestGetFilepathFromURL(t *testing.T) {
+	root := "/tmp"
+	repoURL, err := url.Parse("https://github.com/jackson-hughes/git-get.git")
+	if err != nil {
+		t.Fatalf("unexpected error parsing url: %v", err)
+	}
+
+	got := GetFilepathFromURL(*repoURL, root)
+	want := filepath.Join(root, "github.com", "jackson-hughes", "git-get")
+
+	if got != want {
+		t.Errorf("GetFilepathFromURL() = %q, want %q", got, want)
 	}
 }

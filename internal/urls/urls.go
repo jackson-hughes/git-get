@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/rs/zerolog/log"
 	"net/url"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -41,7 +42,11 @@ func GetFilepathFromURL(url url.URL, gitProjectRoot string) string {
 		gitHost = strings.Split(url.Host, ":")[0]
 		log.Debug().Msgf("port found in hostname, %v has been replaced with %v", url.Host, gitHost)
 	}
-	gitProject := strings.Replace(url.Path, ".git", "", 1)
-	path := fmt.Sprint(gitProjectRoot, "/", gitHost, gitProject)
-	return path
+	gitProject := strings.TrimSuffix(url.Path, ".git")
+	gitProject = strings.TrimPrefix(gitProject, "/")
+	pathParts := []string{gitProjectRoot, gitHost}
+	if gitProject != "" {
+		pathParts = append(pathParts, strings.Split(gitProject, "/")...)
+	}
+	return filepath.Join(pathParts...)
 }
