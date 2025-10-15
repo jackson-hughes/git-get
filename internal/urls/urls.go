@@ -2,11 +2,12 @@ package urls
 
 import (
 	"fmt"
-	"github.com/rs/zerolog/log"
 	"net/url"
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 // IsScpSyntax takes a string url and returns true if the url is in scp format
@@ -15,9 +16,8 @@ func IsScpSyntax(url string) bool {
 	match := scpSyntax.FindStringSubmatch(url)
 	if match != nil {
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 // ConvertScpURL converts scp syntax urls into ssh transport urls
