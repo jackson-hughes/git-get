@@ -1,5 +1,4 @@
 # git-get
----
 
 ## About
 `git-get` is a simple utility that clones git repositories into a go get style directory structure.
