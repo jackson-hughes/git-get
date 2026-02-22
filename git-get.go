@@ -33,6 +33,11 @@ func main() {
 		displayHelp()
 		return
 	}
+
+	if err := validateGitExists(exec.LookPath); err != nil {
+		log.Fatal().Err(err).Send()
+	}
+
 	gitProjectURL := os.Args[1]
 
 	var gitURL url.URL
@@ -40,13 +45,13 @@ func main() {
 	if ok := urls.IsScpSyntax(gitProjectURL); ok {
 		URL, err := urls.ConvertScpURL(gitProjectURL)
 		if err != nil {
-			log.Fatal().Err(err)
+			log.Fatal().Err(err).Send()
 		}
 		gitURL = *URL
 	} else {
 		URL, err := url.Parse(gitProjectURL)
 		if err != nil {
-			log.Fatal().Err(err)
+			log.Fatal().Err(err).Send()
 		}
 		gitURL = *URL
 	}
@@ -54,6 +59,14 @@ func main() {
 	projectFilepath := urls.GetFilepathFromURL(gitURL, appConfig.Dir)
 	log.Debug().Msgf("input url: %v", gitURL.String())
 	log.Debug().Msgf("path to write repo to: %v", projectFilepath)
+
+	exists, err := checkDirectoryExists(projectFilepath)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Error checking target directory")
+	}
+	if exists {
+		log.Fatal().Msgf("Target directory already exists: %s", projectFilepath)
+	}
 
 	if err := clone(gitURL, projectFilepath); err != nil {
 		log.Err(err)
