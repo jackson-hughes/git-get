@@ -69,7 +69,6 @@ func main() {
 	}
 
 	if err := clone(gitURL, projectFilepath); err != nil {
-		log.Err(err)
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Error cloning repository")
 	}
 }
