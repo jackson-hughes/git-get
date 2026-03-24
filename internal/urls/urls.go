@@ -24,14 +24,14 @@ func IsScpSyntax(url string) bool {
 // git@github.com:jackson-hughes/git-get.git -> ssh://git@github.com/jackson-hughes/git-get
 func ConvertScpURL(scpSyntaxUrl string) (*url.URL, error) {
 	log.Debug().Msgf("ConvertScpURL: received input %v: ", scpSyntaxUrl)
-	convertedUrl, err := url.Parse(fmt.Sprintf("ssh://%v", strings.Replace(
-		strings.Replace(scpSyntaxUrl, ":", "/", 1),
-		".git", "", 1)))
+	path := strings.Replace(scpSyntaxUrl, ":", "/", 1)
+	path = strings.TrimSuffix(path, ".git")
+	convertedURL, err := url.Parse(fmt.Sprintf("ssh://%v", path))
 	if err != nil {
 		return nil, err
 	}
-	log.Debug().Msgf("ConvertScpURL: returned %v: ", convertedUrl)
-	return convertedUrl, nil
+	log.Debug().Msgf("ConvertScpURL: returned %v: ", convertedURL)
+	return convertedURL, nil
 }
 
 // GetFilepathFromURL determines the go get style filepath based on the git url
