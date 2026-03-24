@@ -1,0 +1,47 @@
+permissions:
+  contents: read # access to check out code and install dependencies
+
+name: Go
+on:
+  pull_request:
+    paths:
+      - "**.go"
+      - "go.mod"
+      - "Makefile"
+      - ".github/workflows/go.yaml"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ["oldstable", "stable"]
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Go
+        uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
+        with:
+          go-version: ${{ matrix.go-version }}
+          cache: true
+
+      - name: Display Go version
+        run: go version
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+        if: matrix.go-version == 'stable'
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./... -cover -race
+
+      - name: Run govulncheck
+        run: govulncheck ./...
+        if: matrix.go-version == 'stable'
