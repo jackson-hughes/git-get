@@ -15,9 +15,9 @@ Produces:
 
 Clone the repository and either build the binary or install the binary to `$GOBIN`.
 
-The Makefile provides build and install targets, e.g:
+The [Taskfile](https://taskfile.dev/) provides build and install commands, e.g:
 
-    make install
+    task install
 
 Or simply:
 
