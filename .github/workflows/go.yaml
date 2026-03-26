@@ -7,7 +7,7 @@ on:
     paths:
       - "**.go"
       - "go.mod"
-      - "Makefile"
+      - "Taskfile.yml"
       - ".github/workflows/go.yaml"
 
 jobs:

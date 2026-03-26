@@ -1,10 +1,11 @@
 package main
 
 import (
+	"os"
+
 	"github.com/kelseyhightower/envconfig"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"os"
 )
 
 type Specification struct {
@@ -14,8 +15,7 @@ type Specification struct {
 
 var appConfig Specification
 
-var vcsCommit string
-var vcsURL string
+var version string
 
 func init() {
 	if err := envconfig.Process("git_get", &appConfig); err != nil {
@@ -30,6 +30,6 @@ func init() {
 	}
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
-	log.Debug().Msgf("vcs url: %v\tvcs commit: %v", vcsURL, vcsCommit)
+	log.Debug().Msgf("version: %v", version)
 	log.Debug().Msgf("config: %+v", appConfig)
 }
