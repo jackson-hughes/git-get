@@ -7,6 +7,8 @@ vars:
     sh: go env GOOS
   GOARCH:
     sh: go env GOARCH
+  GIT_COMMIT:
+    sh: git rev-parse HEAD
 
 tasks:
   default:
@@ -18,17 +20,11 @@ tasks:
     desc: Builds the binary into the project root
     cmds:
       - GOARCH={{.GOARCH}} GOOS={{.GOOS}} go build -o . -ldflags="-X main.version={{.GIT_COMMIT}}" ./...
-    vars:
-      GIT_COMMIT:
-        sh: git rev-parse HEAD
 
   install:
     desc: Installs the package into the Go bin directory
     cmds:
       - go install -ldflags="-X main.version={{.GIT_COMMIT}}" ./...
-    vars:
-      GIT_COMMIT:
-        sh: git rev-parse HEAD
 
   clean:
     desc: Removes build artifacts
