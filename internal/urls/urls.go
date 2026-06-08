@@ -10,14 +10,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+var scpSyntaxRegex = regexp.MustCompile(`^([a-zA-Z0-9_]+)@([a-zA-Z0-9._-]+):(.*)$`)
+
 // IsScpSyntax takes a string url and returns true if the url is in scp format
 func IsScpSyntax(url string) bool {
-	scpSyntax := regexp.MustCompile(`^([a-zA-Z0-9_]+)@([a-zA-Z0-9._-]+):(.*)$`)
-	match := scpSyntax.FindStringSubmatch(url)
-	if match != nil {
-		return true
-	}
-	return false
+	return scpSyntaxRegex.FindStringSubmatch(url) != nil
 }
 
 // ConvertScpURL converts scp syntax urls into ssh transport urls
