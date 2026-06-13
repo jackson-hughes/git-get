@@ -1,1 +1,3 @@
 /git-get
+dist/
+.task/

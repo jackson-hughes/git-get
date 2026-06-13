@@ -41,3 +41,8 @@ tasks:
     cmds:
       - go test ./... -cover -race
       - govulncheck ./...
+
+  snapshot:
+    desc: Builds a local multi-platform snapshot using goreleaser (no publish)
+    cmds:
+      - goreleaser release --snapshot --clean
