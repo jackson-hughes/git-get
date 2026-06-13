@@ -4,11 +4,6 @@ permissions:
 name: Go
 on:
   pull_request:
-    paths:
-      - "**.go"
-      - "go.mod"
-      - "Taskfile.yml"
-      - ".github/workflows/go.yaml"
 
 jobs:
   ci:
