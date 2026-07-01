@@ -1,8 +1,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/kelseyhightower/envconfig"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -10,16 +8,20 @@ import (
 
 type Specification struct {
 	Debug bool
-	Dir   string `default:"/tmp"`
+	Dir   string
 }
 
 var appConfig Specification
 
-var version string
+var version = "dev"
 
-func init() {
+func loadConfig() {
 	if err := envconfig.Process("git_get", &appConfig); err != nil {
-		log.Fatal().Msgf("error loading config:\n %v", err)
+		log.Fatal().Err(err).Msg("Error loading config")
+	}
+
+	if appConfig.Dir == "" {
+		log.Fatal().Msg(`GIT_GET_DIR is not set; set the clone root directory, e.g. export GIT_GET_DIR="$HOME/Projects"`)
 	}
 
 	if appConfig.Debug {
@@ -28,7 +30,6 @@ func init() {
 	} else {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	log.Debug().Msgf("version: %v", version)
 	log.Debug().Msgf("config: %+v", appConfig)

@@ -6,9 +6,8 @@ import (
 )
 
 func validateGitExists(lookPath func(string) (string, error)) error {
-	_, err := lookPath("git")
-	if err != nil {
-		return fmt.Errorf("git binary not found in PATH. Please install git to use git-get")
+	if _, err := lookPath("git"); err != nil {
+		return fmt.Errorf("git binary not found in PATH (install git to use git-get): %w", err)
 	}
 	return nil
 }
