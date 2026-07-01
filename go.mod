@@ -1,4 +1,4 @@
-module git-get
+module github.com/jackson-hughes/git-get
 
 go 1.25.0
 

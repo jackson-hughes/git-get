@@ -13,18 +13,23 @@ Produces:
 
 ## Installation
 
-Clone the repository and either build the binary or install the binary to `$GOBIN`.
+Install directly with Go:
 
-The [Taskfile](https://taskfile.dev/) provides build and install commands, e.g:
+    go install github.com/jackson-hughes/git-get@latest
+
+Alternatively, clone the repository and build or install from source. The [Taskfile](https://taskfile.dev/) provides build and install commands, e.g:
 
     task install
 
-Or simply:
-
-    go install
-
 ## Config
 
-Set the root directory that `git-get` will use by setting the `GIT_GET_DIR` environment variable. I set mine in my `~/.zshrc`, e.g:
+`git-get` is configured via environment variables:
+
+| Variable | Required | Description |
+| --- | --- | --- |
+| `GIT_GET_DIR` | Yes | Root directory that repositories are cloned into |
+| `GIT_GET_DEBUG` | No | Set to `true` to enable debug logging |
+
+I set `GIT_GET_DIR` in my `~/.zshrc`, e.g:
 
     export GIT_GET_DIR="$HOME/Projects"
